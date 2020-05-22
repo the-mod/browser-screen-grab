@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
-const { log } = require('./logger');
 
 /**
  * returns timeStamp of now in the format YYYYMMDDHHmmss
@@ -18,11 +17,20 @@ const getProjectRoot = () => {
 }
 
 /**
- * gets the absolute path if the given directory was relative
- * @param {string} outDir 
+ * checks if the given path is absolute
+ * @param {string} dir 
+ */
+const isAbsolutePath = (dir) => {
+    return path.isAbsolute(dir);
+}
+
+/**
+ * Gets the absolute path if the given directory was relative to project root.
+ * If the given path was already absoulte it gets returned as is.
+ * @param {string} outDir path to the ouput directory
  */
 const getAbsolutePath = (outDir) => {
-    return path.join(getProjectRoot(), outDir);
+    return isAbsolutePath(outDir) ? outDir : path.join(getProjectRoot(), outDir);
 }
 
 /**
@@ -31,12 +39,7 @@ const getAbsolutePath = (outDir) => {
  */
 const createDirectoryIfNotExists = (path) => {
     if (!fs.existsSync(path)) {
-        try {
-          fs.mkdirSync(path);
-        } catch (err) {
-          log(`Can not create Directory ${path}`);
-          process.exit(1);
-        }
+        fs.mkdirSync(path);
     }
 }
 
@@ -60,20 +63,11 @@ const getFilenameWithTimestamp = (targetDir, fileNamePrefix) => {
     return getFileName(targetDir, fileNamePrefix, now());
 }
 
-
-/**
- * checks if the given path is absolute
- * @param {string} dir 
- */
-const isAbsolutePath = (dir) => {
-    return path.isAbsolute(dir);
-}
-
 module.exports = {
     createDirectoryIfNotExists,
     getFileName,
     getFilenameWithTimestamp,
-    getProjectRoot,
-    isAbsolutePath,
+    getProjectRoot, //only for testing reasons
+    isAbsolutePath, //only for testing reasons
     getAbsolutePath,
 }

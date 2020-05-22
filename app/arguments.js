@@ -8,15 +8,14 @@ const {
 } = require('./validator');
 
 const {
-  isAbsolutePath,
   getAbsolutePath,
   createDirectoryIfNotExists,
 } = require('./storage');
 
 const { log } = require('./logger');
 
-const defaultOutDir = 'pics';
-const defaultFileName = 'screenshot';
+const DEFAULT_OUT_DIR = 'pics';
+const DEFAULT_FILE_NAME = 'screenshot';
 
 const urlArgument = {
   name: 'url',
@@ -44,7 +43,7 @@ const filenameArgument = {
     alias: 'f',
     nargs: 1,
     description: 'Filename prefix',
-    default: defaultFileName,
+    default: DEFAULT_FILE_NAME,
     type: 'string',
   }
 }
@@ -55,7 +54,7 @@ const outdirArgument = {
     alias: 'o',
     nargs: 1,
     description: 'Directory where Screenshots be stored',
-    default: defaultOutDir,
+    default: DEFAULT_OUT_DIR,
     type: 'string',
   }
 }
@@ -91,10 +90,16 @@ const parse = () => {
   
     // validating the directory
     const outdir = args.outdir
-    const targetPath = isAbsolutePath(outdir) ? outdir : getAbsolutePath(outdir);
+
+    const targetPath = getAbsolutePath(outdir);
     if (!directoryExists(targetPath)) {
       log(`Directory '${targetPath}' does not exists. Creating directory...`);
-      createDirectoryIfNotExists(targetPath);
+      try {
+        createDirectoryIfNotExists(targetPath);
+      } catch(err) {
+        log(`Can not create Directory ${targetPath}`);
+        process.exit(1);
+      }
       log(`Directory ${targetPath} created`);
     } else {
       if (!isDirectoryWritable(targetPath)) {
@@ -106,11 +111,13 @@ const parse = () => {
     return {
       interval,
       url,
-      outdir,
+      outdir: targetPath,
       fileNamePrefix: args.filename,
     }
 }
 
 module.exports = {
     parse,
+    DEFAULT_FILE_NAME,
+    DEFAULT_OUT_DIR,
 }

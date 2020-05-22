@@ -3,6 +3,11 @@ const puppeteer = require('puppeteer');
 const storage = require('./storage');
 const { log } = require('./logger');
 
+const {
+  DEFAULT_FILE_NAME,
+  DEFAULT_OUT_DIR,
+} = require('./arguments');
+
 let browser = null;
 
 /**
@@ -44,14 +49,15 @@ const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
 
 /**
  * starts the process of screen graping within the given interval
- * @param {number} interval 
- * @param {string} url 
- * @param {string} outdir 
- * @param {string} fileNamePrefix 
- * @param {Object} puppeteerOptions 
+ * @param {number} interval in milliseconds
+ * @param {string} url the URL to capute
+ * @param {string} outdir the out dir should exist
+ * @param {string} fileNamePrefix the prefix of the filenames
+ * @param {Object} puppeteerOptions launch options for pupeteer to override
  */
-const grap = (interval, url, outdir, fileNamePrefix, puppeteerOptions) => {
-  log(`starting with interval ${interval} milliseconds`);
+const grap = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_FILE_NAME, puppeteerOptions = {}) => {
+  log(`Starting interval of ${interval} milliseconds`);
+  log(`Working on Directory ${outdir}`);
   setInterval(() => {
     getPage(url, outdir, fileNamePrefix, puppeteerOptions);
   }, interval);
