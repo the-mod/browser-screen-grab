@@ -44,13 +44,13 @@ const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
 
 /**
  * starts the process of screen graping within the given interval
+ * @param {number} interval 
  * @param {string} url 
  * @param {string} outdir 
  * @param {string} fileNamePrefix 
- * @param {number} interval 
  * @param {Object} puppeteerOptions 
  */
-const grap = (url, outdir, fileNamePrefix, interval, puppeteerOptions) => {
+const grap = (interval, url, outdir, fileNamePrefix, puppeteerOptions) => {
   log(`starting with interval ${interval} milliseconds`);
   setInterval(() => {
     getPage(url, outdir, fileNamePrefix, puppeteerOptions);
