@@ -2,7 +2,7 @@
   "name": "browser-screen-grap",
   "version": "1.0.0",
   "description": "",
-  "main": "capture.js",
+  "main": "app/capture.js",
   "scripts": {
     "start": "node app/cli.js",
     "test": "jest"
