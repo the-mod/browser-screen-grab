@@ -1,0 +1,22 @@
+{
+  "name": "browser-screen-grap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "capture.js",
+  "scripts": {
+    "start": "node app/cli.js",
+    "test": "jest"
+  },
+  "repository": "https://github.com/the-mod/browser-screen-grab",
+  "author": "the-mod",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "puppeteer": "^2.1.1",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
+}
