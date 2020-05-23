@@ -30,4 +30,4 @@ You can not use the Chromium comes with Puppeteer on Raspbian.
 So install Chromium on your own and refer to it while launching pupeteer Browser.
 
 * Install Chromium e.g. `sudo apt-get install chromium`
-* Reference to the Chromium Installation e.g. `/usr/bin/chromium-browser` as `executablePath` Option at `pupeteer.launch()`
+* Reference to the Chromium Installation e.g. `/usr/bin/chromium-browser` as `executablePath` Option like `pupeteer.launch({executablePath: 'path to chromium'})`. See also [Puppeteer Launch Options](https://github.com/puppeteer/puppeteer/blob/v3.1.0/docs/api.md#puppeteerlaunchoptions)
