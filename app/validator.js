@@ -1,39 +1,19 @@
-const fs = require('fs');
 const _ = require('lodash');
-const URL = require("url").URL;
+const { isURL } = require('validator');
+const isValid = require('is-valid-path');
 
-/**
- * checks if the given path is writeable
- * @param {string} path 
- */
-const isDirectoryWritable = (path) => {
-    try {
-      fs.accessSync(path, fs.constants.W_OK);
-      return true;
-    } catch(err) {
-      return false;
-    };
- }
-    
-/**
- * checks if the given path exists
- * @param {string} path 
- */
- const directoryExists = (path) => {
-     return fs.existsSync(path);
- }
+const URL_OPTIONS = {
+    protocols:  ['http','https'],
+    require_protocol: true,
+    require_host: true,
+};
     
 /**
  * checks the given url
  * @param {string} url 
  */
  const isURLValid = (url) => {
-     try {
-         new URL(url);
-         return true;
-     } catch (err) {
-         return false;
-     }
+    return isURL(url, URL_OPTIONS);
  }
     
 /**
@@ -41,10 +21,15 @@ const isDirectoryWritable = (path) => {
  * @param {number} interval 
  */
  const isIntervalValid = (interval) => _.isFinite(interval);
+
+ /**
+  * checks if the given path is valid
+  * @param {string} path 
+  */
+ const isPathValid = (path) => isValid(path);
  
  module.exports = {
     isIntervalValid,
     isURLValid,
-    directoryExists,
-    isDirectoryWritable,
+    isPathValid,
  }

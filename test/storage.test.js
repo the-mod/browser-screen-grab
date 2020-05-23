@@ -38,3 +38,14 @@ test('isAbsolutePath() should return true for C:\\testPath', () => {
     outdir = 'C:\\testPath';
     expect(storage.isAbsolutePath(outdir)).toBe(true);
 });
+
+test('getAbsolutePath() should return C:\\testPath', () => {
+    outdir = 'C:\\testPath';
+    expect(storage.getAbsolutePath(outdir)).toBe(outdir);
+});
+
+test('getAbsolutePath() should return C:\\testPath for testPath', () => {
+    outdir = 'testPath';
+    expected = `${storage.getProjectRoot()}\\${outdir}`;
+    expect(storage.getAbsolutePath(outdir)).toBe(expected);
+});

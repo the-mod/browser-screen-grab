@@ -31,3 +31,7 @@ test('checkURL() should return true for "http://www.example.com/testpath"', () =
 test('checkURL() should return true for "http://www.example.com/testpath?query=value"', () => {
     expect(validator.isURLValid('http://www.example.com/testpath?query=value')).toBe(true);
 });
+
+test('checkURL() should return false for "ftp://example.com/"', () => {
+    expect(validator.isURLValid('ftp://example.com/')).toBe(false);
+});

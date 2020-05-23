@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
+const { log } = require('./logger');
 
 /**
  * returns timeStamp of now in the format YYYYMMDDHHmmss
@@ -39,7 +40,7 @@ const getAbsolutePath = (outDir) => {
  */
 const createDirectoryIfNotExists = (path) => {
     if (!fs.existsSync(path)) {
-        fs.mkdirSync(path);
+      fs.mkdirSync(path);
     }
 }
 
@@ -63,11 +64,55 @@ const getFilenameWithTimestamp = (targetDir, fileNamePrefix) => {
     return getFileName(targetDir, fileNamePrefix, now());
 }
 
+/**
+ * checks if the given path is writeable
+ * @param {string} path 
+ */
+const isDirectoryWritable = (path) => {
+    try {
+      fs.accessSync(path, fs.constants.W_OK);
+      return true;
+    } catch(err) {
+      return false;
+    };
+ }
+    
+/**
+ * checks if the given path exists
+ * @param {string} path 
+ */
+ const directoryExists = (path) => {
+     return fs.existsSync(path);
+ }
+
+ /**
+  * Checks if the outdir exists, if not it creates it and returns a absolute path to it.
+  * @param {string} path the path of the outdir
+  */
+const initDirectory = (path) => {
+    const targetPath = getAbsolutePath(path);
+    if (!directoryExists(targetPath)) {
+      log(`Directory '${targetPath}' does not exists. Creating directory...`);
+      try {
+        createDirectoryIfNotExists(targetPath);
+      } catch(err) {
+        throw new Error(`Can not create Directory '${targetPath}'`);
+      }
+      log(`Directory '${targetPath}' created`);
+    } else {
+      if (!isDirectoryWritable(targetPath)) {
+        throw new Error(`Directory '${targetPath}' is not writable`);
+      }
+    }
+    return targetPath;
+}
+
 module.exports = {
+    initDirectory,
     createDirectoryIfNotExists,
     getFileName,
     getFilenameWithTimestamp,
     getProjectRoot, //only for testing reasons
     isAbsolutePath, //only for testing reasons
-    getAbsolutePath,
+    getAbsolutePath, //only for testing reasons
 }

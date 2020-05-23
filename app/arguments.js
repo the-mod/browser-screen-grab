@@ -3,14 +3,8 @@ const yargs = require('yargs');
 const {
   isIntervalValid,
   isURLValid,
-  directoryExists,
-  isDirectoryWritable,
+  isPathValid,
 } = require('./validator');
-
-const {
-  getAbsolutePath,
-  createDirectoryIfNotExists,
-} = require('./storage');
 
 const { log } = require('./logger');
 
@@ -62,7 +56,7 @@ const outdirArgument = {
 const parse = () => {
     args = yargs
     .usage('Usage: $0 -i [num] -u [string]')
-    .epilogue('for more information, go to http://github.com/the-mod/browser-capturing')
+    .epilogue('for more information, go to https://github.com/the-mod/browser-screen-grab')
     .option(urlArgument.name, urlArgument.options)
     .option(intervalArgument.name, intervalArgument.options)
     .option(filenameArgument.name, filenameArgument.options)
@@ -78,40 +72,28 @@ const parse = () => {
       log(`Given url ${url} is not valid`);
       process.exit(1);
     }
-  
+
     // validating given interval
     inputInterval = args.interval;
     if (!isIntervalValid(inputInterval)) {
       log(`Given interval ${inputInterval} is not valid`);
       process.exit(1);
     }
-    // get milliseconds
-    const interval = inputInterval * 1000;
   
     // validating the directory
-    const outdir = args.outdir
-
-    const targetPath = getAbsolutePath(outdir);
-    if (!directoryExists(targetPath)) {
-      log(`Directory '${targetPath}' does not exists. Creating directory...`);
-      try {
-        createDirectoryIfNotExists(targetPath);
-      } catch(err) {
-        log(`Can not create Directory ${targetPath}`);
-        process.exit(1);
-      }
-      log(`Directory ${targetPath} created`);
-    } else {
-      if (!isDirectoryWritable(targetPath)) {
-        logger.log(`Directory ${path} is not writable`);
-        process.exit(1);
-      }
+    const outdir = args.outdir;
+    if (!isPathValid(outdir)) {
+      log(`Given direcoty ${outdir} is not valid`);
+      process.exit(1);
     }
+
+    const filename = args.filename;
+    // TODO check if it is string
   
     return {
-      interval,
+      interval: inputInterval * 1000,
       url,
-      outdir: targetPath,
+      outdir,
       fileNamePrefix: args.filename,
     }
 }

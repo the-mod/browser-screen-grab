@@ -56,11 +56,20 @@ const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
  * @param {Object} puppeteerOptions launch options for pupeteer to override
  */
 const grap = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_FILE_NAME, puppeteerOptions = {}) => {
-  log(`Starting interval of ${interval} milliseconds`);
-  log(`Working on Directory ${outdir}`);
-  setInterval(() => {
-    getPage(url, outdir, fileNamePrefix, puppeteerOptions);
-  }, interval);
+  try {
+    targetDir = storage.initDirectory(outdir);
+
+    log(`Starting interval of ${interval} milliseconds`);
+    log(`Working on Directory ${targetDir}`);
+
+    setInterval(() => {
+      getPage(url, outdir, fileNamePrefix, puppeteerOptions);
+    }, interval);
+    
+  } catch(err) {
+    log(`Error initializing outdir: ${err}`);
+    process.exit(1);
+  }
 };
 
 module.exports = {
