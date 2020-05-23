@@ -1,6 +1,6 @@
 # Intro
 
-This Project is about to grap Screenshots as PNG in a regular timebase of a webpage.
+This Project is about to grab Screenshots as PNG in a regular timebase of a webpage.
 It uses [Puppeteer](https://github.com/puppeteer/puppeteer) for rendering the webpage.
 It saves the Screenshot as PNG Images.
 
