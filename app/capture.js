@@ -63,7 +63,7 @@ const grab = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_
     log(`Working on Directory ${targetDir}`);
 
     setInterval(() => {
-      getPage(url, outdir, fileNamePrefix, puppeteerOptions);
+      getPage(url, targetDir, fileNamePrefix, puppeteerOptions);
     }, interval);
     
   } catch(err) {
