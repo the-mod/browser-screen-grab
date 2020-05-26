@@ -5,7 +5,8 @@
   "main": "app/capture.js",
   "scripts": {
     "start": "node app/cli.js",
-    "test": "jest"
+    "test": "jest",
+    "prettier": "prettier --single-quote --trailing-comma all --write package.json \"{app,__{tests,mocks}__}/**/*.js\""
   },
   "repository": "https://github.com/the-mod/browser-screen-grab",
   "author": "the-mod",
@@ -19,6 +20,7 @@
     "yargs": "^15.3.1"
   },
   "devDependencies": {
-    "jest": "^26.0.1"
+    "jest": "^26.0.1",
+    "prettier": "2.0.5"
   }
 }

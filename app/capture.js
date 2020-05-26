@@ -3,10 +3,7 @@ const puppeteer = require('puppeteer');
 const storage = require('./storage');
 const { log } = require('./logger');
 
-const {
-  DEFAULT_FILE_NAME,
-  DEFAULT_OUT_DIR,
-} = require('./arguments');
+const { DEFAULT_FILE_NAME, DEFAULT_OUT_DIR } = require('./arguments');
 
 let browser = null;
 
@@ -15,23 +12,26 @@ let browser = null;
  * @param {Object} launchOptions pass options to pupeteer e.g. executablePath
  */
 const getBrowser = async (launchOptions) => {
-    if (!browser) {
-        browser = await puppeteer.launch(launchOptions);
-    }
-    return browser
-}
+  if (!browser) {
+    browser = await puppeteer.launch(launchOptions);
+  }
+  return browser;
+};
 
 /**
  * gets the given page of the url, takes a Screenshot and stores it under the given outdir with the given fileNamePrefix
- * @param {string} url 
- * @param {string} outputDir 
- * @param {string} fileNamePrefix 
- * @param {Object} puppeteerOptions 
+ * @param {string} url
+ * @param {string} outputDir
+ * @param {string} fileNamePrefix
+ * @param {Object} puppeteerOptions
  */
 const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
   const browser = await getBrowser(puppeteerOptions);
   const page = await browser.newPage();
-  const outputPath = storage.getFilenameWithTimestamp(outputDir, fileNamePrefix);
+  const outputPath = storage.getFilenameWithTimestamp(
+    outputDir,
+    fileNamePrefix,
+  );
   await page.setViewport({
     width: 1920,
     height: 1080,
@@ -41,7 +41,7 @@ const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
   await page.goto(url);
   await page.screenshot({
     fullPage: false, // set to true if page is scrollable
-    path: outputPath
+    path: outputPath,
   });
   log('saved to: ' + outputPath);
   await page.close();
@@ -55,7 +55,13 @@ const getPage = async (url, outputDir, fileNamePrefix, puppeteerOptions) => {
  * @param {string} fileNamePrefix the prefix of the filenames
  * @param {Object} puppeteerOptions launch options for pupeteer to override
  */
-const grab = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_FILE_NAME, puppeteerOptions = {}) => {
+const grab = (
+  interval,
+  url,
+  outdir = DEFAULT_OUT_DIR,
+  fileNamePrefix = DEFAULT_FILE_NAME,
+  puppeteerOptions = {},
+) => {
   try {
     targetDir = storage.initDirectory(outdir);
 
@@ -65,8 +71,7 @@ const grab = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_
     setInterval(() => {
       getPage(url, targetDir, fileNamePrefix, puppeteerOptions);
     }, interval);
-    
-  } catch(err) {
+  } catch (err) {
     log(`Error initializing outdir: ${err}`);
     process.exit(1);
   }
@@ -74,4 +79,4 @@ const grab = (interval, url, outdir = DEFAULT_OUT_DIR, fileNamePrefix = DEFAULT_
 
 module.exports = {
   grab,
-}
+};
